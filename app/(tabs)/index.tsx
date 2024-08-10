@@ -12,6 +12,9 @@ export default function HomeScreen() {
 
   const [modelAssets, setModelAssets] = useState<Asset[] | null>(null)
 
+  // ToDo: https://aachibilyaev.com/expo/workflow/prebuild/
+  // ToDo: https://github.com/fs-eire/ort-rn-hello-world (from https://github.com/microsoft/onnxruntime/issues/11507)
+
   const loadModel = async() => {
     // const [assets, error] = useAssets([require('@/assets/models/model.onnx')]);
     // const modelAssets = await Asset.loadAsync(require('@/assets/models/model.onnx'));

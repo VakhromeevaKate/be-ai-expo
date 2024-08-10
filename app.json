@@ -14,13 +14,19 @@
       "backgroundColor": "#f4f2ef"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.vakhromeevae.beaiexpo"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/icon.png",
         "backgroundColor": "#f4f2ef"
-      }
+      },
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.vakhromeevae.beaiexpo"
     },
     "web": {
       "bundler": "metro",
