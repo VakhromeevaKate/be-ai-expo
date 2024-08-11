@@ -34,6 +34,24 @@ export default function HomeScreen() {
       throw e;
     }
   }
+
+  async function loadBeModel() {
+    try {
+      const assets = await Asset.loadAsync(require('@/assets/models/model.onnx'));
+      const modelUri = assets[0].localUri;
+      if (!modelUri) {
+        Alert.alert('failed to get model URI', `${assets[0]}`);
+      } else {
+        myModel = await ort.InferenceSession.create(modelUri);
+        Alert.alert(
+          'model loaded successfully',
+          `input names: ${myModel.inputNames}, output names: ${myModel.outputNames}`);
+      }
+    } catch (e) {
+      Alert.alert('failed to load model', `${e}`);
+      throw e;
+    }
+  }
   
   async function runModel() {
     try {
@@ -46,7 +64,7 @@ export default function HomeScreen() {
         Alert.alert('failed to get output', `${myModel.outputNames[0]}`);
       } else {
         Alert.alert(
-          'model inference successfully',
+          'Mnist model inference successfully',
           `output shape: ${output.dims}, output data: ${output.data}`);
       }
     } catch (e) {
@@ -54,9 +72,26 @@ export default function HomeScreen() {
       throw e;
     }
   }
-  useEffect(() => {
-    loadModel();
-  }, []);
+
+  async function runBeModel() {
+    try {
+      const inputData = new Float32Array(512 * 512);
+      const feeds:Record<string, ort.Tensor> = {};
+      feeds[myModel.inputNames[0]] = new ort.Tensor(inputData, [1, 512, 512]);
+      const fetches = await myModel.run(feeds);
+      const output = fetches[myModel.outputNames[0]];
+      if (!output) {
+        Alert.alert('failed to get output', `${myModel.outputNames[0]}`);
+      } else {
+        Alert.alert(
+          'Be model inference successfully',
+          `output shape: ${output.dims}, output data: ${output.data}`);
+      }
+    } catch (e) {
+      Alert.alert('failed to inference model', `${e}`);
+      throw e;
+    }
+  }
 
   return (
     <ParallaxScrollView
@@ -74,8 +109,10 @@ export default function HomeScreen() {
       <ThemedView style={styles.stepContainer}>
       <View style={styles.container}>
         <Text>using ONNX Runtime for React Native</Text>
-        <Button title='Load model' onPress={loadModel}></Button>
-        <Button title='Run' onPress={runModel}></Button>
+        <Button title='Load Mnist model' onPress={loadModel}></Button>
+        <Button title='Run Mnist' onPress={runModel}></Button>
+        <Button title='Load Be model' onPress={loadModel}></Button>
+        <Button title='Run Be' onPress={runModel}></Button>
         <StatusBar />
     </View>
       </ThemedView>
