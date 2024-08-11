@@ -1,29 +1,59 @@
-import { Image, StyleSheet } from 'react-native';
+import { Alert, Button, Image, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { ThemedText } from '@/components/ThemedText';
 import { ThemedView } from '@/components/ThemedView';
-import { useAssets, type Asset } from 'expo-asset';
+import { Asset } from 'expo-asset';
 import { Colors } from '@/constants/Colors';
 
-export default function HomeScreen() {
+import * as ort from 'onnxruntime-react-native';
 
-  const [modelAssets, setModelAssets] = useState<Asset[] | null>(null)
+let myModel: ort.InferenceSession;
+
+export default function HomeScreen() {
 
   // ToDo: https://aachibilyaev.com/expo/workflow/prebuild/
   // ToDo: https://github.com/fs-eire/ort-rn-hello-world (from https://github.com/microsoft/onnxruntime/issues/11507)
 
-  const loadModel = async() => {
-    // const [assets, error] = useAssets([require('@/assets/models/model.onnx')]);
-    // const modelAssets = await Asset.loadAsync(require('@/assets/models/model.onnx'));
-    // if (assets) {
-    //   setModelAssets(assets);
-    // }
-    // console.log('modelAssets:', assets || error);
+  async function loadModel() {
+    try {
+      const assets = await Asset.loadAsync(require('@/assets/models/mnist.ort'));
+      const modelUri = assets[0].localUri;
+      if (!modelUri) {
+        Alert.alert('failed to get model URI', `${assets[0]}`);
+      } else {
+        myModel = await ort.InferenceSession.create(modelUri);
+        Alert.alert(
+          'model loaded successfully',
+          `input names: ${myModel.inputNames}, output names: ${myModel.outputNames}`);
+      }
+    } catch (e) {
+      Alert.alert('failed to load model', `${e}`);
+      throw e;
+    }
   }
-
+  
+  async function runModel() {
+    try {
+      const inputData = new Float32Array(28 * 28);
+      const feeds:Record<string, ort.Tensor> = {};
+      feeds[myModel.inputNames[0]] = new ort.Tensor(inputData, [1, 28, 28]);
+      const fetches = await myModel.run(feeds);
+      const output = fetches[myModel.outputNames[0]];
+      if (!output) {
+        Alert.alert('failed to get output', `${myModel.outputNames[0]}`);
+      } else {
+        Alert.alert(
+          'model inference successfully',
+          `output shape: ${output.dims}, output data: ${output.data}`);
+      }
+    } catch (e) {
+      Alert.alert('failed to inference model', `${e}`);
+      throw e;
+    }
+  }
   useEffect(() => {
     loadModel();
   }, []);
@@ -42,7 +72,12 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">{modelAssets?.length}</ThemedText>
+      <View style={styles.container}>
+        <Text>using ONNX Runtime for React Native</Text>
+        <Button title='Load model' onPress={loadModel}></Button>
+        <Button title='Run' onPress={runModel}></Button>
+        <StatusBar />
+    </View>
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -57,6 +92,12 @@ const styles = StyleSheet.create({
   stepContainer: {
     gap: 8,
     marginBottom: 8,
+  },
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   reactLogo: {
     height: "100%",
