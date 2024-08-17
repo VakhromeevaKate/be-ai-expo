@@ -1,5 +1,9 @@
-import { Alert, Button, Image, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Alert, Button, Dimensions, Image, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
+import {
+  BarChart,
+  PieChart
+} from 'react-native-chart-kit';
 
 import { HelloWave } from '@/components/HelloWave';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
@@ -9,6 +13,7 @@ import { Asset } from 'expo-asset';
 import { Colors } from '@/constants/Colors';
 
 import * as ort from 'onnxruntime-react-native';
+import { GraphColors } from '@/constants/GraphColors';
 
 let myModel: ort.InferenceSession;
 
@@ -16,6 +21,83 @@ export default function HomeScreen() {
 
   // ToDo: https://aachibilyaev.com/expo/workflow/prebuild/
   // ToDo: https://github.com/fs-eire/ort-rn-hello-world (from https://github.com/microsoft/onnxruntime/issues/11507)
+
+  const screenWidth = Dimensions.get('window').width - 60;
+
+  const waterGlassesData = {
+    labels: ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"],
+    datasets: [
+      {
+        data: [6, 8, 5, 8, 8, 8, 1]
+      }
+    ]
+  };
+
+  const mealData = [
+    {
+      name: "Carbohydrates",
+      population: 100,
+      color: GraphColors.light.carbohydrates,
+      legendFontColor: GraphColors.light.legend,
+      legendFontSize: 12
+    },
+    {
+      name: "Fats",
+      population: 50,
+      color: GraphColors.light.fats,
+      legendFontColor: GraphColors.light.legend,
+      legendFontSize: 12
+    },
+    {
+      name: "Proteins",
+      population: 70,
+      color: GraphColors.light.proteins,
+      legendFontColor: GraphColors.light.legend,
+      legendFontSize: 12
+    },
+    {
+      name: "Fiber",
+      population: 400,
+      color: GraphColors.light.fiber,
+      legendFontColor: GraphColors.light.legend,
+      legendFontSize: 12
+    }
+  ];
+
+  const pieChartConfig = {
+    backgroundColor: "#e26a00",
+      backgroundGradientFrom: "#fb8c00",
+      backgroundGradientTo: "#ffa726",
+      decimalPlaces: 2, // optional, defaults to 2dp
+      color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+      labelColor: () => Colors.light.text,
+      style: {
+        borderRadius: 16
+      },
+      propsForDots: {
+        r: "6",
+        strokeWidth: "2",
+        stroke: "#ffa726"
+      },
+      hasLegend: false,
+  };
+
+  const barChartConfig = {
+    backgroundColor: Colors.light.background,
+      backgroundGradientFrom: Colors.light.background,
+      backgroundGradientTo: Colors.light.background,
+      decimalPlaces: 0, // optional, defaults to 2dp
+      color: () => GraphColors.light.water,
+      labelColor: () => Colors.light.text,
+      style: {
+        borderRadius: 16
+      },
+      propsForDots: {
+        r: "6",
+        strokeWidth: "2",
+        stroke: "#ffa726"
+      }
+  };
 
   async function loadModel() {
     try {
@@ -107,14 +189,39 @@ export default function HomeScreen() {
         <HelloWave />
       </ThemedView>
       <ThemedView style={styles.stepContainer}>
-      <View style={styles.container}>
-        <Text>using ONNX Runtime for React Native</Text>
-        <Button title='Load Mnist model' onPress={loadModel}></Button>
-        <Button title='Run Mnist' onPress={runModel}></Button>
-        <Button title='Load Be model' onPress={loadModel}></Button>
-        <Button title='Run Be' onPress={runModel}></Button>
-        <StatusBar />
-    </View>
+        <View style={styles.container}>
+          <Text>using ONNX Runtime for React Native</Text>
+          <Button title='Load Mnist model' onPress={loadModel}></Button>
+          <Button title='Run Mnist' onPress={runModel}></Button>
+          <Button title='Load Be model' onPress={loadBeModel}></Button>
+          <Button title='Run Be' onPress={runBeModel}></Button>
+          <StatusBar />
+        </View>
+      </ThemedView>
+      <ThemedView>
+      <PieChart
+        data={mealData}
+        width={screenWidth}
+        height={200}
+        chartConfig={pieChartConfig}
+        accessor={"population"}
+        backgroundColor={"transparent"}
+        paddingLeft={"15"}
+        center={[10, 50]}
+        absolute
+      />
+      </ThemedView>
+      <ThemedView>
+      <BarChart
+        style={styles.barGraphStyle}
+        data={waterGlassesData}
+        width={screenWidth}
+        height={220}
+        yAxisLabel=""
+        yAxisSuffix="cups"
+        chartConfig={barChartConfig}
+        verticalLabelRotation={30}
+        />
       </ThemedView>
     </ParallaxScrollView>
   );
@@ -141,5 +248,15 @@ const styles = StyleSheet.create({
     width: "100%",
     bottom: 0,
     left: 0
+  },
+  pieGraphStyle: {
+    maxWidth: "80%",
+    maxHeight: 200,
+    margin: 20,
+  },
+  barGraphStyle: {
+    maxWidth: "80%",
+    maxHeight: 200,
+    margin: 20,
   },
 });
