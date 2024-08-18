@@ -13,15 +13,15 @@ import { Asset } from 'expo-asset';
 import { Colors } from '@/constants/Colors';
 
 import * as ort from 'onnxruntime-react-native';
+import { InferenceSession } from "onnxruntime-react-native";
 import { GraphColors } from '@/constants/GraphColors';
-
-let myModel: ort.InferenceSession;
 
 export default function HomeScreen() {
 
   // ToDo: https://aachibilyaev.com/expo/workflow/prebuild/
   // ToDo: https://github.com/fs-eire/ort-rn-hello-world (from https://github.com/microsoft/onnxruntime/issues/11507)
 
+  let myModel: InferenceSession;
   const screenWidth = Dimensions.get('window').width - 60;
 
   const waterGlassesData = {
@@ -86,7 +86,7 @@ export default function HomeScreen() {
     backgroundColor: Colors.light.background,
       backgroundGradientFrom: Colors.light.background,
       backgroundGradientTo: Colors.light.background,
-      decimalPlaces: 0, // optional, defaults to 2dp
+      decimalPlaces: 0,
       color: () => GraphColors.light.water,
       labelColor: () => Colors.light.text,
       style: {
@@ -124,7 +124,8 @@ export default function HomeScreen() {
       if (!modelUri) {
         Alert.alert('failed to get model URI', `${assets[0]}`);
       } else {
-        myModel = await ort.InferenceSession.create(modelUri);
+        // myModel = await ort.InferenceSession.create(modelUri);
+        myModel = await InferenceSession.create(modelUri);
         Alert.alert(
           'model loaded successfully',
           `input names: ${myModel.inputNames}, output names: ${myModel.outputNames}`);
@@ -157,9 +158,10 @@ export default function HomeScreen() {
 
   async function runBeModel() {
     try {
-      const inputData = new Float32Array(512 * 512);
+      const inputData = new Float32Array(1 * 3 * 512 * 512);
       const feeds:Record<string, ort.Tensor> = {};
-      feeds[myModel.inputNames[0]] = new ort.Tensor(inputData, [1, 512, 512]);
+      feeds[myModel.inputNames[0]] = new ort.Tensor(inputData, [1, 3, 512, 512]);
+      console.log('runBeModel feeds:', feeds['input0'].size);
       const fetches = await myModel.run(feeds);
       const output = fetches[myModel.outputNames[0]];
       if (!output) {
