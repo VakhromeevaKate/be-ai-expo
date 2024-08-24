@@ -1,3 +1,4 @@
+import React from 'react';
 import { Alert, Button, Dimensions, Image, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
 import { i18n } from '@/i18n/homeScreen.i18n';

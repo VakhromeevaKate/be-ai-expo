@@ -44,7 +44,7 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="explore"
+        name="profile"
         options={{
           title: i18n.t('profile'),
           tabBarIcon: ({ color, focused }) => (

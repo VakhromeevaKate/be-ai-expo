@@ -1,6 +1,8 @@
+import React from 'react';
 import { CameraView, CameraType, useCameraPermissions } from 'expo-camera';
 import { useState } from 'react';
 import { Button, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { i18n } from '@/i18n/camera.i18n';
 
 export default function App() {
   const [facing, setFacing] = useState<CameraType>('back');
@@ -15,8 +17,8 @@ export default function App() {
     // Camera permissions are not granted yet.
     return (
       <View style={styles.container}>
-        <Text style={styles.message}>We need your permission to show the camera</Text>
-        <Button onPress={requestPermission} title="grant permission" />
+        <Text style={styles.message}>{i18n.t('permissionTitle')}</Text>
+        <Button onPress={requestPermission} title={i18n.t('permissionAction')} />
       </View>
     );
   }

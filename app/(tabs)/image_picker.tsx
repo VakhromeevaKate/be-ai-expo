@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Image, View, StyleSheet } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
+import { i18n } from '@/i18n/gallery.i18n';
 
 export default function ImagePickerExample() {
   const [image, setImage] = useState<string | null>(null);
@@ -23,7 +24,7 @@ export default function ImagePickerExample() {
 
   return (
     <View style={styles.container}>
-      <Button title="Pick an image from camera roll" onPress={pickImage} />
+      <Button title={i18n.t('pickAnImage')} onPress={pickImage} />
       {image && <Image source={{ uri: image }} style={styles.image} />}
     </View>
   );
