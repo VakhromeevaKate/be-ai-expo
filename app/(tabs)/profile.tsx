@@ -1,11 +1,6 @@
 import React from 'react';
-import { StyleSheet, Image, Platform } from 'react-native';
-
-import { Collapsible } from '@/components/Collapsible';
-import { ExternalLink } from '@/components/ExternalLink';
+import { StyleSheet, Image } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { i18n } from '@/i18n/profile.i18n';
 
@@ -18,8 +13,9 @@ export default function TabTwoScreen() {
           source={require('@/assets/images/icon.png')}
           style={styles.reactLogo}
         />
-      }>
-        <ThemedText type="title">{i18n.t('userInfo')}</ThemedText>
+      }
+      title={i18n.t('userInfo')}
+    >
     </ParallaxScrollView>
   );
 }
@@ -36,8 +32,8 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   reactLogo: {
-    height: "100%",
-    width: "100%",
+    height: 200,
+    width: 200,
     bottom: 0,
     left: 0
   },

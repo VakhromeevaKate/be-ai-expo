@@ -4,9 +4,11 @@ import { I18n } from 'i18n-js';
 const i18n = new I18n({
     en: {
         pickAnImage: "Pick an image from camera roll",
+        recognizeImage: "Recognize image"
     },
     ru: {
         pickAnImage: "Выберите фото из галереи",
+        recognizeImage: "Распознать"
     },
   });
 
