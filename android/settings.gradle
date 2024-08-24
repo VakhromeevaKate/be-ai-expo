@@ -1,4 +1,4 @@
-rootProject.name = 'be-ai-expo'
+rootProject.name = 'Be AI'
 
 dependencyResolutionManagement {
   versionCatalogs {
