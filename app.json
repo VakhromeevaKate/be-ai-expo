@@ -38,7 +38,8 @@
       "expo-camera",
       "expo-image-picker",
       "onnxruntime-react-native",
-      "expo-asset"
+      "expo-asset",
+      "expo-localization"
     ],
     "experiments": {
       "typedRoutes": true

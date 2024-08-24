@@ -1,5 +1,6 @@
 import { Alert, Button, Dimensions, Image, StatusBar, StyleSheet, Text, View } from 'react-native';
 import { useEffect, useState } from 'react';
+import { i18n } from '@/i18n/homeScreen.i18n';
 import {
   BarChart,
   PieChart
@@ -17,10 +18,6 @@ import { InferenceSession } from "onnxruntime-react-native";
 import { GraphColors } from '@/constants/GraphColors';
 
 export default function HomeScreen() {
-
-  // ToDo: https://aachibilyaev.com/expo/workflow/prebuild/
-  // ToDo: https://github.com/fs-eire/ort-rn-hello-world (from https://github.com/microsoft/onnxruntime/issues/11507)
-
   let myModel: InferenceSession;
   const screenWidth = Dimensions.get('window').width - 60;
 
@@ -176,6 +173,10 @@ export default function HomeScreen() {
       throw e;
     }
   }
+
+  useEffect(() => {
+    console.log(i18n.t('welcome'));
+  }, []);
 
   return (
     <ParallaxScrollView

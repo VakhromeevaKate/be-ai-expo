@@ -5,6 +5,8 @@ import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
 
+import { i18n } from '@/i18n/navBar.i18n';
+
 export default function TabLayout() {
   const colorScheme = useColorScheme();
 
@@ -17,16 +19,16 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Home',
+          title: i18n.t('diary'),
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'home' : 'home-outline'} color={color} />
+            <TabBarIcon name={focused ? 'book' : 'book-outline'} color={color} />
           ),
         }}
       />
       <Tabs.Screen
         name="camera"
         options={{
-          title: 'Camera',
+          title: i18n.t('camera'),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'camera' : 'camera-outline'} color={color} />
           ),
@@ -35,7 +37,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="image_picker"
         options={{
-          title: 'Gallery',
+          title: i18n.t('gallery'),
           tabBarIcon: ({ color, focused }) => (
             <TabBarIcon name={focused ? 'image' : 'image-outline'} color={color} />
           ),
@@ -44,9 +46,9 @@ export default function TabLayout() {
       <Tabs.Screen
         name="explore"
         options={{
-          title: 'Explore',
+          title: i18n.t('profile'),
           tabBarIcon: ({ color, focused }) => (
-            <TabBarIcon name={focused ? 'code-slash' : 'code-slash-outline'} color={color} />
+            <TabBarIcon name={focused ? 'accessibility' : 'accessibility'} color={color} />
           ),
         }}
       />
