@@ -1,4 +1,3 @@
-import React from 'react';
 import { StyleSheet, Image } from 'react-native';
 import ParallaxScrollView from '@/components/ParallaxScrollView';
 import { Colors } from 'react-native/Libraries/NewAppScreen';

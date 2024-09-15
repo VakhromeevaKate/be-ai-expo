@@ -9,7 +9,6 @@ import Animated, {
 
 import { ThemedView } from '@/components/ThemedView';
 import { ThemedText } from '@/components/ThemedText';
-import React from 'react';
 
 const HEADER_HEIGHT = 200;
 
