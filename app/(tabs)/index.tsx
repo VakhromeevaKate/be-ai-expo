@@ -72,7 +72,7 @@ export default function HomeScreen() {
         accessor={"population"}
         backgroundColor={"transparent"}
         paddingLeft={"15"}
-        center={[10, 50]}
+        center={[0, 0]}
         absolute
       />
       </ThemedView>
@@ -80,12 +80,12 @@ export default function HomeScreen() {
       <BarChart
         style={styles.barGraphStyle}
         data={waterGlassesData}
-        width={screenWidth}
+        width={screenWidth - 20}
         height={220}
         yAxisLabel=""
         yAxisSuffix={` ${i18n.t('cup')}`}
         chartConfig={barChartConfig}
-        verticalLabelRotation={30}
+        verticalLabelRotation={0}
         />
       </ThemedView>
       <ThemedView>
